@@ -16,7 +16,9 @@ namespace VaccineHub.Web.Endpoints.Configuration.Validators
             RuleFor(x => x.EmailId)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("EmailId cannot be null or empty");
+                .WithMessage("EmailId cannot be null or empty")
+                .EmailAddress()
+                .WithMessage("A valid email is required");;
 
             RuleFor(x => x.Password)
                 .NotNull()
