@@ -17,7 +17,7 @@ namespace VaccineHub.Web.SeedData
         {
             _context.ApiUsers.Add(new ApiUser
             {
-                EmailId = "admin",
+                EmailId = "admin@studentmail.ul.ie",
                 IsActive = true,
                 UserType = UserType.Admin,
                 Password = "admin"
@@ -25,7 +25,7 @@ namespace VaccineHub.Web.SeedData
 
             _context.ApiUsers.Add(new ApiUser
             {
-                EmailId = "CS5721",
+                EmailId = "CS5721@studentmail.ul.ie",
                 IsActive = true,
                 UserType = UserType.Admin,
                 Password = "CS5721"
