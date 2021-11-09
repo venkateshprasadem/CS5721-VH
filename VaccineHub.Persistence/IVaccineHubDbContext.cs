@@ -13,6 +13,10 @@ namespace VaccineHub.Persistence
 
         DbSet<ApiUser> ApiUsers { get; }
 
+        DbSet<Product> Products { get; }
+
+        DbSet<Center> Centers { get; }
+
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 }

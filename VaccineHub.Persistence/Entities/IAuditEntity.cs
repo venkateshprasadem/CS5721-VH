@@ -7,5 +7,8 @@ namespace VaccineHub.Persistence.Entities
     {
         [Column("created_at")]
         DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

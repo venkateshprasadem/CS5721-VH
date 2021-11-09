@@ -108,7 +108,7 @@ namespace VaccineHub.Web
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 
             services
-                .RegisterServices(Configuration)
+                .RegisterServices()
                 .AddResponseCompression()
                 .AddDatabase(Configuration)
                 .AddSwaggerGen(SetupSwaggerGen)
@@ -132,8 +132,10 @@ namespace VaccineHub.Web
             {
                 return ((ControllerActionDescriptor) x.ActionDescriptor).ControllerName switch
                 {
-                    "Configuration" => "01",
-                    "Health" => "02",
+                    "Product" => "01",
+                    "Center" => "02",
+                    "ApiUser" => "03",
+                    "Health" => "04",
                     _ => throw new NotSupportedException("API order is undefined")
                 };
             });

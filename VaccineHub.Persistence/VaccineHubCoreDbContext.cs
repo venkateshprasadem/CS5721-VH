@@ -8,7 +8,7 @@ using VaccineHub.Persistence.Types;
 
 namespace VaccineHub.Persistence
 {
-    public class VaccineHubDbContext : DbContext, IVaccineHubDbContext
+    internal class VaccineHubDbContext : DbContext, IVaccineHubDbContext
     {
         public VaccineHubDbContext(DbContextOptions<VaccineHubDbContext> options)
             : base(options)
@@ -47,11 +47,14 @@ namespace VaccineHub.Persistence
             foreach (var added in addedAuditedEntities)
             {
                 added.CreatedAt = now;
+                added.UpdatedAt = now;
             }
 
             return base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<ApiUser> ApiUsers => Set<ApiUser>();
+        public DbSet<Product> Products => Set<Product>();
+        public DbSet<Center> Centers => Set<Center>();
     }
 }

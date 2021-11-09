@@ -7,15 +7,13 @@
     <ItemGroup>
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
         <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-        <PackageReference Include="AutoMapper" Version="10.1.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\VaccineHub.Hosting\VaccineHub.Hosting.csproj" />
         <ProjectReference Include="..\VaccineHub.Persistence\VaccineHub.Persistence.csproj" />
+        <ProjectReference Include="..\VaccineHub.Service\VaccineHub.Service.csproj" />
     </ItemGroup>
 </Project>

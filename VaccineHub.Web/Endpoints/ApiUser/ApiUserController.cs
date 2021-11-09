@@ -6,17 +6,14 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VaccineHub.Web.Services.Users;
-using VaccineHub.Web.Services.Users.Models;
 
-namespace VaccineHub.Web.Endpoints.Configuration
+namespace VaccineHub.Web.Endpoints.ApiUser
 {
-    [Authorize(Roles = "Admin")]
-    [Route("[controller]")]
-    public sealed class ConfigurationController : ControllerBase
+    public sealed class ApiUserController : ControllerBase
     {
         private readonly IApiUsersDataProvider _apiUsersDataProvider;
 
-        public ConfigurationController([NotNull] IApiUsersDataProvider apiUsersDataProvider)
+        public ApiUserController([NotNull] IApiUsersDataProvider apiUsersDataProvider)
         {
             _apiUsersDataProvider = apiUsersDataProvider ?? throw new ArgumentNullException(nameof(apiUsersDataProvider));
         }
@@ -27,9 +24,10 @@ namespace VaccineHub.Web.Endpoints.Configuration
         ///  Add Api User to Vaccine Hub Database
         /// </summary>
         [HttpPost]
+        [Authorize]
         [Route("ApiUser")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> AddUserAsync([FromBody] ApiUser user, CancellationToken token)
+        public async Task<IActionResult> AddUserAsync([FromBody] Services.Users.Models.ApiUser user, CancellationToken token)
         {
             await _apiUsersDataProvider.AddUserAsync(user, token);
 
@@ -44,8 +42,9 @@ namespace VaccineHub.Web.Endpoints.Configuration
         ///  Retrieve Api user from Vaccine Hub database
         /// </summary>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("ApiUser('{emailId}')")]
-        [ProducesResponseType(typeof(ApiUser), 200)]
+        [ProducesResponseType(typeof(Services.Users.Models.ApiUser), 200)]
         public async Task<IActionResult> GetUserAsync(string emailId, CancellationToken token)
         {
             var user = await _apiUsersDataProvider.GetUserAsync(emailId, token);
@@ -57,13 +56,14 @@ namespace VaccineHub.Web.Endpoints.Configuration
         ///  Retrieve all Api users from Vaccine Hub database
         /// </summary>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("ApiUsers")]
-        [ProducesResponseType(typeof(IDictionary<string, ApiUser>), 200)]
+        [ProducesResponseType(typeof(IDictionary<string, Services.Users.Models.ApiUser>), 200)]
         public async Task<IActionResult> GetUsersAsync(CancellationToken token)
         {
             var users = await _apiUsersDataProvider.GetUsersAsync(token);
 
-            return Ok(users ?? new Dictionary<string, ApiUser>());
+            return Ok(users ?? new Dictionary<string, Services.Users.Models.ApiUser>());
         }
 
         #endregion
@@ -74,9 +74,10 @@ namespace VaccineHub.Web.Endpoints.Configuration
         ///  Update Api user from Vaccine Hub Database
         /// </summary>
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         [Route("ApiUser('{apiUserId}')")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateApiUserAsync(string apiUserId, [FromBody] ApiUser user, CancellationToken token)
+        public async Task<IActionResult> UpdateApiUserAsync(string apiUserId, [FromBody] Services.Users.Models.ApiUser user, CancellationToken token)
         {
             try
             {
