@@ -9,7 +9,7 @@ namespace VaccineHub.Persistence.Entities
     public class ApiUser : IAuditEntity
     {
         [Key]
-        [Column("emailId")]
+        [Column("email_id")]
         public string EmailId { get; set; }
 
         [Required]
@@ -26,5 +26,8 @@ namespace VaccineHub.Persistence.Entities
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

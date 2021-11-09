@@ -25,11 +25,51 @@ namespace VaccineHub.Web.SeedData
 
             _context.ApiUsers.Add(new ApiUser
             {
-                EmailId = "CS5721@studentmail.ul.ie",
+                EmailId = "21004528@studentmail.ul.ie",
                 IsActive = true,
-                UserType = UserType.Admin,
-                Password = "CS5721"
+                UserType = UserType.Customer,
+                Password = "21004528"
             });
+
+            _context.ApiUsers.Add(new ApiUser
+            {
+                EmailId = "21197091@studentmail.ul.ie",
+                IsActive = true,
+                UserType = UserType.Customer,
+                Password = "21197091"
+            });
+
+            _context.ApiUsers.Add(new ApiUser
+            {
+                EmailId = "21017301@studentmail.ul.ie",
+                IsActive = true,
+                UserType = UserType.Customer,
+                Password = "21017301"
+            });
+
+            var center = new Center
+            {
+                Id = "limerick",
+                Name = "Hospital Community Center",
+                Description = "Center",
+                Telephone = "0123456789",
+                EirCode = "V35 X2P1"
+            };
+
+            var product = new Product
+            {
+                Id = "pfizer",
+                Name = "pfizer",
+                Cost = 10,
+                Doses = 2,
+                MinIntervalInDays = 17,
+                MaxIntervalInDays = 27,
+                Currency = Currency.Eur
+            };
+
+            _context.Centers.Add(center);
+
+            _context.Products.Add(product);
 
             await _context.SaveChangesAsync();
         }

@@ -2,9 +2,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using VaccineHub.Persistence;
 
-namespace VaccineHub.Web.Endpoints.Configuration
+namespace VaccineHub.Web.Endpoints.ApiUser
 {
-    public static class VaccineHubDbContextExtensions
+    public static class VaccineHubDbContextApiUserExtensions
     {
         public static async Task<bool> IsValidEmailId(this IVaccineHubDbContext dbContext, string emailId, CancellationToken cancellationToken)
         {
