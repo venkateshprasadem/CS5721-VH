@@ -7,7 +7,7 @@ namespace VaccineHub.Service.Abstractions {
     {
         Task<Models.Product> GetProductAsync(string productId, CancellationToken cancellationToken);
         Task<bool> AddProductAsync(Models.Product product, CancellationToken cancellationToken);
-        Task<bool> UpdateProductAsync(string productId, Models.Product product, CancellationToken cancellationToken);
+        Task<bool> UpdateProductAsync(Models.Product product, CancellationToken cancellationToken);
         Task<List<Models.Product>> GetAllProductsAsync(CancellationToken cancellationToken);
     }
 }

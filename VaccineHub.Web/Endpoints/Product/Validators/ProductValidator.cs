@@ -2,6 +2,7 @@ using FluentValidation;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using VaccineHub.Persistence;
+using VaccineHub.Web.Endpoints.VaccineHubDbContextExtensions;
 
 namespace VaccineHub.Web.Endpoints.Product.Validators
 {

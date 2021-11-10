@@ -17,6 +17,8 @@ namespace VaccineHub.Persistence
 
         DbSet<Center> Centers { get; }
 
+        DbSet<Inventory> Inventories { get; }
+
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 }

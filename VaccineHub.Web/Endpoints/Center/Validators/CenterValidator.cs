@@ -2,6 +2,7 @@ using FluentValidation;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 using VaccineHub.Persistence;
+using VaccineHub.Web.Endpoints.VaccineHubDbContextExtensions;
 
 namespace VaccineHub.Web.Endpoints.Center.Validators
 {
@@ -47,7 +48,7 @@ namespace VaccineHub.Web.Endpoints.Center.Validators
                 RuleFor(x => x.Id)
                     .MustAsync(dbContext.IsCenterIdPresent)
                     .WithMessage(
-                        "One of the following actions failed : Specified product does not exist or Id change not allowed");
+                        "One of the following actions failed : Specified center does not exist or Id change not allowed");
             });
         }
     }

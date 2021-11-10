@@ -54,7 +54,7 @@ namespace VaccineHub.Service.Center
             return true;
         }
 
-        public async Task<bool> UpdateCenterAsync(string centerId, Models.Center center, CancellationToken cancellationToken)
+        public async Task<bool> UpdateCenterAsync(Models.Center center, CancellationToken cancellationToken)
         {
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();

@@ -71,12 +71,12 @@ namespace VaccineHub.Web.Services.Users
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateApiUserAsync(string apiUserId, ApiUser apiUserToUpdate, CancellationToken token)
+        public async Task UpdateApiUserAsync(ApiUser apiUserToUpdate, CancellationToken token)
         {
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
-            var user = await dbContext.ApiUsers.FindAsync(new object[] {apiUserId}, token);
+            var user = await dbContext.ApiUsers.FindAsync(new object[] {apiUserToUpdate.EmailId}, token);
 
             if (user == null)
             {

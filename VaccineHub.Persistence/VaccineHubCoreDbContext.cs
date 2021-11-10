@@ -56,5 +56,6 @@ namespace VaccineHub.Persistence
         public DbSet<ApiUser> ApiUsers => Set<ApiUser>();
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Center> Centers => Set<Center>();
+        public DbSet<Inventory> Inventories => Set<Inventory>();
     }
 }

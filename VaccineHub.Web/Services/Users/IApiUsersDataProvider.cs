@@ -10,6 +10,6 @@ namespace VaccineHub.Web.Services.Users
         Task AddUserAsync(ApiUser apiUser, CancellationToken cancellationToken);
         Task<ApiUser> GetUserAsync(string emailId, CancellationToken cancellationToken);
         Task<IDictionary<string, ApiUser>> GetUsersAsync(CancellationToken cancellationToken);
-        Task UpdateApiUserAsync(string apiUserId, ApiUser apiUser, CancellationToken token);
+        Task UpdateApiUserAsync(ApiUser apiUser, CancellationToken token);
     }
 }
