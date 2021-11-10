@@ -56,13 +56,13 @@ namespace VaccineHub.Service.Product
             return true;
         }
 
-        public async Task<bool> UpdateProductAsync(string productId, Models.Product product, CancellationToken cancellationToken)
+        public async Task<bool> UpdateProductAsync(Models.Product product, CancellationToken cancellationToken)
         {
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
             var existingProduct = await dbContext.Products
-                .FindAsync(new object[] {productId}, cancellationToken);
+                .FindAsync(new object[] {product.Id}, cancellationToken);
             
             if (existingProduct == null)
             {

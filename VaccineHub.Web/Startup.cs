@@ -134,8 +134,9 @@ namespace VaccineHub.Web
                 {
                     "Product" => "01",
                     "Center" => "02",
-                    "ApiUser" => "03",
-                    "Health" => "04",
+                    "Inventory" => "03",
+                    "ApiUser" => "04",
+                    "Health" => "05",
                     _ => throw new NotSupportedException("API order is undefined")
                 };
             });

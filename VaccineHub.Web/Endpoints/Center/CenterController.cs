@@ -52,9 +52,16 @@ namespace VaccineHub.Web.Endpoints.Center
         [ProducesResponseType(typeof(Models.Center), 200)]
         public async Task<IActionResult> GetCenterAsync(string centerId, CancellationToken token)
         {
-            var center = await _centerService.GetCenterAsync(centerId, token);
+            try
+            {
+                var center = Mapper.Map<Models.Center>(await _centerService.GetCenterAsync(centerId, token));
 
-            return Ok(center);
+                return Ok(center);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -80,13 +87,13 @@ namespace VaccineHub.Web.Endpoints.Center
         /// </summary>
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        [Route("Center('{centerId}')")]
+        [Route("Center)")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateCenterAsync(string centerId, [FromBody] Models.Center center, CancellationToken token)
+        public async Task<IActionResult> UpdateCenterAsync([FromBody] Models.Center center, CancellationToken token)
         {
             try
             {
-                await _centerService.UpdateCenterAsync(centerId, Mapper.Map<Service.Models.Center>(center), token);
+                await _centerService.UpdateCenterAsync(Mapper.Map<Service.Models.Center>(center), token);
 
                 return NoContent();
             }

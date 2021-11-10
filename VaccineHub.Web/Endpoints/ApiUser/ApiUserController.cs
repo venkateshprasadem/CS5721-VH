@@ -75,13 +75,13 @@ namespace VaccineHub.Web.Endpoints.ApiUser
         /// </summary>
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        [Route("ApiUser('{apiUserId}')")]
+        [Route("ApiUser)")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateApiUserAsync(string apiUserId, [FromBody] Services.Users.Models.ApiUser user, CancellationToken token)
+        public async Task<IActionResult> UpdateApiUserAsync([FromBody] Services.Users.Models.ApiUser user, CancellationToken token)
         {
             try
             {
-                await _apiUsersDataProvider.UpdateApiUserAsync(apiUserId, user, token);
+                await _apiUsersDataProvider.UpdateApiUserAsync(user, token);
 
                 return NoContent();
             }

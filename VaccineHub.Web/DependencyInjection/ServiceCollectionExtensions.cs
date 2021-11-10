@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using VaccineHub.Service.RegisterDependency;
+using VaccineHub.Service.RegisterDependencies;
 using VaccineHub.Web.Authentication;
 using VaccineHub.Web.Services.Users;
 
@@ -16,7 +16,7 @@ namespace VaccineHub.Web.DependencyInjection
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddServices();
+            services.AddServicesImplementations();
             services.AddSingleton<IApiUsersDataProvider, ApiUsersDataProvider>();
             services.AddSingleton<AuthenticatorTemplate, BasicAuthenticator>();
 

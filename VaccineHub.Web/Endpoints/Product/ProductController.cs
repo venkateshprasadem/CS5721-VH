@@ -59,9 +59,16 @@ namespace VaccineHub.Web.Endpoints.Product
         [ProducesResponseType(typeof(Models.Product), 200)]
         public async Task<IActionResult> GetProductAsync(string productId, CancellationToken token)
         {
-            var product = await _productService.GetProductAsync(productId, token);
+            try
+            {
+                var product = Mapper.Map<Models.Product>(await _productService.GetProductAsync(productId, token));
 
-            return Ok(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -87,13 +94,13 @@ namespace VaccineHub.Web.Endpoints.Product
         /// </summary>
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        [Route("Product('{productId}')")]
+        [Route("Product")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> UpdateProductAsync(string productId, [FromBody] Models.Product product, CancellationToken token)
+        public async Task<IActionResult> UpdateProductAsync([FromBody] Models.Product product, CancellationToken token)
         {
             try
             {
-                await _productService.UpdateProductAsync(productId, Mapper.Map<Service.Models.Product>(product), token);
+                await _productService.UpdateProductAsync(Mapper.Map<Service.Models.Product>(product), token);
 
                 return NoContent();
             }

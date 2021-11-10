@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VaccineHub.Persistence;
 
-namespace VaccineHub.Web.Endpoints.Center
+namespace VaccineHub.Web.Endpoints.VaccineHubDbContextExtensions
 {
     public static class VaccineHubDbContextCenterExtensions
     {

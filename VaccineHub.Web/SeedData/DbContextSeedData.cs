@@ -71,6 +71,13 @@ namespace VaccineHub.Web.SeedData
 
             _context.Products.Add(product);
 
+            _context.Inventories.Add(new Inventory
+            {
+                Product = product,
+                Center = center,
+                Stock = 50
+            });
+            
             await _context.SaveChangesAsync();
         }
     }
