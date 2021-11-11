@@ -11,7 +11,7 @@ namespace VaccineHub.Persistence.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [UsedImplicitly]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public virtual Product Product { get; set; }

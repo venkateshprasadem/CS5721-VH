@@ -132,11 +132,12 @@ namespace VaccineHub.Web
             {
                 return ((ControllerActionDescriptor) x.ActionDescriptor).ControllerName switch
                 {
-                    "Product" => "01",
-                    "Center" => "02",
-                    "Inventory" => "03",
-                    "ApiUser" => "04",
-                    "Health" => "05",
+                    "Booking" => "01",
+                    "Inventory" => "02",
+                    "Product" => "03",
+                    "Center" => "04",
+                    "ApiUser" => "06",
+                    "Health" => "07",
                     _ => throw new NotSupportedException("API order is undefined")
                 };
             });

@@ -20,7 +20,12 @@ namespace VaccineHub.Hosting.Swashbuckle
             string contentRootPath,
             IEnumerable<string> projectXmlFileNames)
         {
-            options.SwaggerDoc(version, new OpenApiInfo {Title = $"{projectName} | CS5721", Version = version});
+            options.SwaggerDoc(version, new OpenApiInfo
+            {
+                Title = $"{projectName} | CS5721", 
+                Version = version,
+                Description = "Group Project by Team Taffeite (UL Student Ids - 21004528, 21017301, 21197091)"
+            });
 
             options.ExampleFilters();
 

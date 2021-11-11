@@ -23,6 +23,34 @@ namespace VaccineHub.Persistence
                 .HasConversion(
                     i => i.ToString(),
                     i => (UserType) Enum.Parse(typeof(UserType), i));
+
+            modelBuilder
+                .Entity<Product>()
+                .Property(i => i.Currency)
+                .HasConversion(
+                    i => i.ToString(),
+                    i => (Currency) Enum.Parse(typeof(Currency), i));
+
+            modelBuilder
+                .Entity<Booking>()
+                .Property(i => i.BookingType)
+                .HasConversion(
+                    i => i.ToString(),
+                    i => (BookingType) Enum.Parse(typeof(BookingType), i));
+
+            modelBuilder
+                .Entity<Booking>()
+                .Property(i => i.DosageType)
+                .HasConversion(
+                    i => i.ToString(),
+                    i => (DosageType) Enum.Parse(typeof(DosageType), i));
+
+            modelBuilder
+                .Entity<PaymentInformation>()
+                .Property(i => i.CreditCardType)
+                .HasConversion(
+                    i => i.ToString(),
+                    i => (CreditCardType) Enum.Parse(typeof(CreditCardType), i));
         }
 
         public bool IsDatabaseInMemory()
@@ -57,5 +85,6 @@ namespace VaccineHub.Persistence
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Center> Centers => Set<Center>();
         public DbSet<Inventory> Inventories => Set<Inventory>();
+        public DbSet<Booking> Bookings => Set<Booking>();
     }
 }

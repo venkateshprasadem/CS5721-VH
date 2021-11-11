@@ -55,9 +55,9 @@ namespace VaccineHub.Web.Authentication
         {
             return new List<Claim>
             {
-                new (ClaimTypes.Name, user.EmailId),
-                new ("EmailId", user.EmailId),
-                new (ClaimTypes.Role, user.UserType.ToString())
+                new(ClaimTypes.Name, user.EmailId),
+                new("EmailId", user.EmailId),
+                new(ClaimTypes.Role, user.UserType.ToString() ?? throw new Exception("UserType is null"))
             };
         }
 
