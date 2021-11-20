@@ -2,11 +2,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
+using VaccineHub.Persistence.Types;
 
 namespace VaccineHub.Persistence.Entities
 {
-    [Table("inventory")]
-    public class Inventory : IAuditEntity
+    [Table("booking")]
+    public class Booking : IAuditEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -14,13 +15,28 @@ namespace VaccineHub.Persistence.Entities
         public Guid Id { get; set; }
 
         [Required]
+        [Column("booking_type")]
+        public BookingType? BookingType { get; set; }
+
+        [Required]
+        [Column("dosage_type")]
+        public DosageType? DosageType { get; set; }
+
+        [Required]
+        [Column("appointment_date")]
+        public DateTime AppointmentDate { get; set; }
+
+        [Required]
+        public virtual ApiUser ApiUser { get; set; }
+
+        [Required]
         public virtual Product Product { get; set; }
- 
+
         [Required]
         public virtual Center Center { get; set; }
 
-        [Column("stock")]
-        public int Stock { get; set; }
+        [Required]
+        public virtual PaymentInformation PaymentInformation { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }

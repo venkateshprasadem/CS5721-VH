@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Quartz;
 using Quartz.Impl;
@@ -66,6 +67,7 @@ namespace VaccineHub.Web
             var host = new WebHostBuilder()
                 .UseConfiguration(Configuration)
                 .UseUrls($"http://*:{Configuration["port"]}")
+                .ConfigureLogging(i => i.AddConsole())
                 .UseStartup<Startup>()
                 .UseKestrel()
                 .UseTransport(KestrelTransport.Sockets)
@@ -151,11 +153,12 @@ namespace VaccineHub.Web
             {
                 return ((ControllerActionDescriptor) x.ActionDescriptor).ControllerName switch
                 {
-                    "Product" => "01",
-                    "Center" => "02",
-                    "Inventory" => "03",
-                    "ApiUser" => "04",
-                    "Health" => "05",
+                    "Booking" => "01",
+                    "Inventory" => "02",
+                    "Product" => "03",
+                    "Center" => "04",
+                    "ApiUser" => "06",
+                    "Health" => "07",
                     _ => throw new NotSupportedException("API order is undefined")
                 };
             });

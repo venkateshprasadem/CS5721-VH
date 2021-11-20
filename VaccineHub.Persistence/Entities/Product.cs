@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using VaccineHub.Persistence.Types;
 
 namespace VaccineHub.Persistence.Entities {
     
     [Table("product")]
-    public class Product {
+    public class Product : IAuditEntity
+    {
 
         [Key]
         [Column("id")]
@@ -28,5 +30,11 @@ namespace VaccineHub.Persistence.Entities {
 
         [Column("minIntervalInDays")]
         public int? MinIntervalInDays { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

@@ -62,6 +62,7 @@ namespace VaccineHub.Service.Inventory
                 }
 
                 dbInventory.Stock = inventory.Stock;
+                dbInventory.UpdatedAt = DateTime.Now;
 
                 await dbContext.SaveChangesAsync(cancellationToken);
 

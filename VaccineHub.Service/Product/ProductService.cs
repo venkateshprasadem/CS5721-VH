@@ -75,6 +75,7 @@ namespace VaccineHub.Service.Product
             existingProduct.Doses = product.Doses;
             existingProduct.MinIntervalInDays = product.MinIntervalInDays;
             existingProduct.MaxIntervalInDays = product.MaxIntervalInDays;
+            existingProduct.UpdatedAt = DateTime.Now;
 
             await dbContext.SaveChangesAsync(cancellationToken);
 

@@ -13,6 +13,7 @@
     </ItemGroup>
    
     <ItemGroup>
+      <ProjectReference Include="..\VaccineHub.PaymentService\VaccineHub.PaymentService.csproj" />
       <ProjectReference Include="..\VaccineHub.Persistence\VaccineHub.Persistence.csproj" />
     </ItemGroup>
 </Project>

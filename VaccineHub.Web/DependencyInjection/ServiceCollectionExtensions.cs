@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using VaccineHub.Service.RegisterDependencies;
+using VaccineHub.Service.RegisterDependency;
 using VaccineHub.Web.Authentication;
 using VaccineHub.Web.Services.Users;
 

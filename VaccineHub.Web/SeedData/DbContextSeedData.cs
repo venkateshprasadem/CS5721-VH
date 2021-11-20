@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using VaccineHub.Persistence;
 using VaccineHub.Persistence.Entities;
@@ -15,20 +16,22 @@ namespace VaccineHub.Web.SeedData
 
         public async Task SeedDataAsync()
         {
+            var apiUser = new ApiUser
+            {
+                EmailId = "21004528@studentmail.ul.ie",
+                IsActive = true,
+                UserType = UserType.Customer,
+                Password = "21004528"
+            };
+
+            _context.ApiUsers.Add(apiUser);
+
             _context.ApiUsers.Add(new ApiUser
             {
                 EmailId = "admin@studentmail.ul.ie",
                 IsActive = true,
                 UserType = UserType.Admin,
                 Password = "admin"
-            });
-
-            _context.ApiUsers.Add(new ApiUser
-            {
-                EmailId = "21004528@studentmail.ul.ie",
-                IsActive = true,
-                UserType = UserType.Customer,
-                Password = "21004528"
             });
 
             _context.ApiUsers.Add(new ApiUser
@@ -67,17 +70,47 @@ namespace VaccineHub.Web.SeedData
                 Currency = Currency.Eur
             };
 
-            _context.Centers.Add(center);
-
-            _context.Products.Add(product);
-
-            _context.Inventories.Add(new Inventory
+            var inventory = new Inventory
             {
                 Product = product,
                 Center = center,
                 Stock = 50
-            });
-            
+            };
+
+            var booking = new Booking
+            {
+                Product = product,
+                Center = center,
+                ApiUser = apiUser,
+                AppointmentDate = new DateTime(2021, 11, 01),
+                BookingType = BookingType.Book,
+                DosageType = DosageType.First,
+                PaymentInformation = new PaymentInformation
+                {
+                    CardNumber = "4111111111111111",
+                    City = "Limerick",
+                    AddressLine1 = "Bru Na Gruadan",
+                    AddressLine2 = "Castletroy",
+                    CountryCode = "IE",
+                    ExpiryMonth = 10,
+                    ExpiryYear = 22,
+                    PostalCode = "V94 CTP6",
+                    ProvinceState = "LI",
+                    Cvv = "123",
+                    CreditCardType = CreditCardType.Visa,
+                    CardHolderFirstName = "Tom",
+                    CardHolderLastName = "Cruise"
+                }
+            };
+
+            _context.Centers.Add(center);
+
+            _context.Products.Add(product);
+
+            _context.Inventories.Add(inventory);
+
+            _context.Bookings.Add(booking);
+
             await _context.SaveChangesAsync();
         }
     }
