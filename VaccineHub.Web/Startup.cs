@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Loader;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using JetBrains.Annotations;
@@ -14,6 +16,9 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -23,6 +28,8 @@ using VaccineHub.Persistence.DependencyInjection;
 using VaccineHub.Web.Authentication;
 using VaccineHub.Web.DependencyInjection;
 using VaccineHub.Web.Filters;
+using VaccineHub.Web.Models;
+using VaccineHub.Web.Scheduler;
 using VaccineHub.Web.SeedData;
 
 namespace VaccineHub.Web
@@ -107,6 +114,18 @@ namespace VaccineHub.Web
 
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 
+            //Registering Qwartz
+            services.AddSingleton<IJobFactory, VaccineHubIJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            
+            //Registering Jobs
+            services.AddSingleton<GenerateCertificatesJob>();
+            services.AddSingleton(new JobScheduleDto(
+                jobType: typeof(GenerateCertificatesJob),
+                cronExpression: "0/5 * * * * ?"));
+
+            services.AddHostedService<VaccineHubQuartzHostedService>();
+            
             services
                 .RegisterServices()
                 .AddResponseCompression()
