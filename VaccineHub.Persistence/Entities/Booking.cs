@@ -7,7 +7,7 @@ using VaccineHub.Persistence.Types;
 namespace VaccineHub.Persistence.Entities
 {
     [Table("booking")]
-    public class Booking
+    public class Booking : IAuditEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -37,5 +37,11 @@ namespace VaccineHub.Persistence.Entities
 
         [Required]
         public virtual PaymentInformation PaymentInformation { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

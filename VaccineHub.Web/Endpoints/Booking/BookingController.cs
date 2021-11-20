@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VaccineHub.Service.Abstractions;
+using VaccineHub.Service.Models;
 
 namespace VaccineHub.Web.Endpoints.Booking
 {
@@ -32,12 +33,19 @@ namespace VaccineHub.Web.Endpoints.Booking
         [Authorize(Roles = "Customer")]
         [Route("Booking")]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> MakeBookingAsync([FromBody] Models.Booking booking, CancellationToken token)
+        public async Task<IActionResult> MakeOrCancelBookingAsync([FromBody] Models.Booking booking, CancellationToken token)
         {
-            await _bookingService.MakeBookingAsync(User.Identity?.Name, Mapper.Map<Service.Models.Booking>(booking),
-                token);
+            try
+            {
+                await _bookingService.MakeOrCancelBookingAsync(User.Identity?.Name, Mapper.Map<Service.Models.Booking>(booking),
+                    token);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         #endregion
@@ -62,35 +70,13 @@ namespace VaccineHub.Web.Endpoints.Booking
 
         #endregion
 
-        #region Update
-
-        /// <summary>
-        ///  Cancel Booking from Vaccine Hub Database
-        /// </summary>
-        [HttpPut]
-        [Authorize(Roles = "Customer")]
-        [Route("Booking")]
-        [ProducesResponseType(204)]
-        public async Task<IActionResult> CancelBookingAsync([FromBody] Models.Booking booking, CancellationToken token)
-        {
-            try
-            {
-                await _bookingService.CancelBookingAsync(User.Identity?.Name, Mapper.Map<Service.Models.Booking>(booking), token);
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        #endregion
-
         private static MapperConfiguration CreateMapConfiguration()
         {
             return new MapperConfiguration(expression =>
             {
+                expression.CreateMap<PaymentInformation, Models.PaymentInformation>()
+                    .ReverseMap();
+
                 expression.CreateMap<Service.Models.Booking, Models.Booking>()
                     .ReverseMap();
             });

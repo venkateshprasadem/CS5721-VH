@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace VaccineHub.Persistence.Entities
 {
     [Table("inventory")]
-    public class Inventory
+    public class Inventory : IAuditEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -21,5 +21,11 @@ namespace VaccineHub.Persistence.Entities
 
         [Column("stock")]
         public int Stock { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

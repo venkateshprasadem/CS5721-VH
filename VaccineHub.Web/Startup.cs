@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -59,6 +60,7 @@ namespace VaccineHub.Web
             var host = new WebHostBuilder()
                 .UseConfiguration(Configuration)
                 .UseUrls($"http://*:{Configuration["port"]}")
+                .ConfigureLogging(i => i.AddConsole())
                 .UseStartup<Startup>()
                 .UseKestrel()
                 .UseTransport(KestrelTransport.Sockets)

@@ -9,6 +9,7 @@ namespace VaccineHub.Web.Types
     {
         [EnumMember(Value = "Book")]
         Book,
+        
         [EnumMember(Value = "Cancel")]
         Cancel
     }

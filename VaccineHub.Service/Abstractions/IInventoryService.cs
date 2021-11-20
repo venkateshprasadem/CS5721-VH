@@ -11,6 +11,6 @@ namespace VaccineHub.Service.Abstractions
         Task<List<Models.Inventory>> GetAllInventoriesAsync(CancellationToken cancellationToken);
         Task<IEnumerable<Models.Inventory>> GetAllInventoriesByCenterIdAsync(string centerId,
             CancellationToken cancellationToken);
-        Task<IEnumerable<Models.Inventory>> GetAllInventoriesByProductIdAsync(string productId, CancellationToken cancellationToken);
+        Task<IEnumerable<Models.Inventory>> GetAllInventoriesByProductIdAsync(string productId, CancellationToken cancellationToken); 
     }
 }

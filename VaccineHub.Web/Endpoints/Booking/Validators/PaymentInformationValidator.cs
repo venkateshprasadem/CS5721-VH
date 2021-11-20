@@ -24,6 +24,8 @@ namespace VaccineHub.Web.Endpoints.Booking.Validators
                 .NotEmpty();
 
             RuleFor(i => i.CardNumber)
+                .Length(8, 19)
+                .WithMessage("Must be 8 to 9 digits long.")
                 .NotEmpty();
 
             RuleFor(i => i.City)

@@ -70,6 +70,7 @@ namespace VaccineHub.Service.Center
             existingCenter.Telephone = center.Telephone;
             existingCenter.EirCode = center.Telephone;
             existingCenter.Description = center.Description;
+            existingCenter.UpdatedAt = DateTime.Now;
 
             await dbContext.SaveChangesAsync(cancellationToken);
 

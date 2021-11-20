@@ -1,14 +1,15 @@
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using VaccineHub.PaymentService.DependencyInjection;
 using VaccineHub.Service.Abstractions;
 using VaccineHub.Service.Booking;
 using VaccineHub.Service.Center;
 using VaccineHub.Service.Inventory;
 using VaccineHub.Service.Product;
 
-namespace VaccineHub.Service.RegisterDependencies
+namespace VaccineHub.Service.RegisterDependency
 {
-    public static class DependencyInjection
+    public static class ServiceCollectionExtensions
     {
         [UsedImplicitly]
         public static IServiceCollection AddServicesImplementations(
@@ -18,6 +19,7 @@ namespace VaccineHub.Service.RegisterDependencies
             services.AddSingleton<ICenterService, CenterService>();
             services.AddSingleton<IInventoryService, InventoryService>();
             services.AddSingleton<IBookingService, BookingService>();
+            services.AddPaymentService();
             return services;
         }
     }
