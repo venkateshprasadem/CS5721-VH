@@ -5,11 +5,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="DinkToPdf" Version="1.0.8" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
         <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+        <PackageReference Include="Quartz" Version="3.3.3" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
     </ItemGroup>
+    
+   
 
     <ItemGroup>
         <ProjectReference Include="..\VaccineHub.Hosting\VaccineHub.Hosting.csproj" />
