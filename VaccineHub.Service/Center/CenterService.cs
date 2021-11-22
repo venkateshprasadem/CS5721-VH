@@ -68,7 +68,7 @@ namespace VaccineHub.Service.Center
 
             existingCenter.Name = center.Name;
             existingCenter.Telephone = center.Telephone;
-            existingCenter.EirCode = center.Telephone;
+            existingCenter.EirCode = center.EirCode;
             existingCenter.Description = center.Description;
             existingCenter.UpdatedAt = DateTime.Now;
 
