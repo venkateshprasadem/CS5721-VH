@@ -12,7 +12,7 @@ using VaccineHub.Service.Concurrency;
 
 namespace VaccineHub.Service.Inventory
 {
-    public class InventoryService : IInventoryService
+    internal class InventoryService : IInventoryService
     {
         private static readonly IMapper Mapper = CreateMapConfiguration()
             .CreateMapper();

@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace VaccineHub.Service.Concurrency
 {
-    public sealed class AsyncSimulatedLock
+    internal sealed class AsyncSimulatedLock
     {
         private sealed class RefCounted<T>
         {
