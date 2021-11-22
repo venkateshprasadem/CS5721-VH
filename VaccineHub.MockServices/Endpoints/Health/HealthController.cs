@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace VaccineHub.MockServices.payment.Endpoints.Health
+namespace VaccineHub.MockServices.Endpoints.Health
 {
     [Route("[controller]")]
     public class HealthController : Controller

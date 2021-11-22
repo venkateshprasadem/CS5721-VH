@@ -1,4 +1,4 @@
-namespace VaccineHub.PaymentService.Models
+namespace VaccineHub.ThirdPartyService.Models
 {
     public sealed class PaymentInformation
     {

@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using VaccineHub.PaymentService;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Concurrency;
-using VaccineHub.Service.Models;
+using VaccineHub.ThirdPartyService;
+using VaccineHub.ThirdPartyService.Models;
+using BookingType = VaccineHub.Service.Models.BookingType;
+using PaymentInformation = VaccineHub.Service.Models.PaymentInformation;
 
 namespace VaccineHub.Service.Booking
 {
@@ -18,13 +20,13 @@ namespace VaccineHub.Service.Booking
 
         private readonly IServiceProvider _serviceProvider;
 
-        private readonly IPaymentService _paymentService;
+        private readonly IThirdPartyService _thirdPartyService;
 
         public Booking(IServiceProvider serviceProvider,
-            IPaymentService paymentService)
+            IThirdPartyService thirdPartyService)
         {
             _serviceProvider = serviceProvider;
-            _paymentService = paymentService;
+            _thirdPartyService = thirdPartyService;
         }
 
         public async Task<bool> PerformOperationAsync(string apiUserId, Models.Booking booking, CancellationToken cancellationToken)
@@ -70,6 +72,17 @@ namespace VaccineHub.Service.Booking
                         Mapper.Map<Persistence.Entities.PaymentInformation>(booking.PaymentInformation)
                 });
 
+                // Debit Payment back from Customer Card
+                await _thirdPartyService.CallAsync(
+                    new PaymentServiceRequest
+                    {
+                        TransactionType = TransactionType.Debit,
+                        Cost = product.Cost,
+                        PaymentInformation = 
+                            Mapper.Map<ThirdPartyService.Models.PaymentInformation>(booking.PaymentInformation)
+                    },
+                    cancellationToken);
+
                 inventory.Stock -= 1;
 
                 inventory.UpdatedAt = DateTime.Now;
@@ -92,11 +105,6 @@ namespace VaccineHub.Service.Booking
                     .FirstAsync(i => i.Product.Id == booking.ProductId && i.Center.Id == booking.CenterId,
                         cancellationToken);
 
-                // Credit Payment back to Customer Card
-                await _paymentService.CreditPaymentAsync(
-                    Mapper.Map<PaymentService.Models.PaymentInformation>(booking.PaymentInformation),
-                    cancellationToken);
-
                 // Cancel
                 var existingBookedDbBookingForProduct = await dbContext.Bookings
                     .Include(i => i.Product)
@@ -111,6 +119,17 @@ namespace VaccineHub.Service.Booking
                              DateTime.Compare(i.AppointmentDate, booking.AppointmentDate) == 0
                         ,
                         cancellationToken);
+
+                // Credit Payment back to Customer Card
+                await _thirdPartyService.CallAsync(
+                    new PaymentServiceRequest
+                    {
+                        TransactionType = TransactionType.Credit,
+                        Cost = existingBookedDbBookingForProduct.Product.Cost,
+                        PaymentInformation = 
+                            Mapper.Map<ThirdPartyService.Models.PaymentInformation>(booking.PaymentInformation)
+                    },
+                    cancellationToken);
 
                 existingBookedDbBookingForProduct.BookingType = Persistence.Types.BookingType.Cancel;
 
@@ -128,7 +147,7 @@ namespace VaccineHub.Service.Booking
         {
             return new MapperConfiguration(expression =>
             {
-                expression.CreateMap<PaymentService.Models.PaymentInformation, PaymentInformation>()
+                expression.CreateMap<ThirdPartyService.Models.PaymentInformation, PaymentInformation>()
                     .ReverseMap();
 
                 expression.CreateMap<Persistence.Entities.PaymentInformation, PaymentInformation>()

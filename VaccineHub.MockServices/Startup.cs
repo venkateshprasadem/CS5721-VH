@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace VaccineHub.MockServices.payment
+namespace VaccineHub.MockServices
 {
     public class Startup
     {

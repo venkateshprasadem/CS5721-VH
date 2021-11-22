@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace VaccineHub.MockServices.payment.Endpoints.Payment.Models
+namespace VaccineHub.MockServices.Endpoints.Payment.Models
 {
     public sealed class PaymentInformation
     {

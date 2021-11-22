@@ -2,19 +2,19 @@ using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace VaccineHub.PaymentService.DependencyInjection
+namespace VaccineHub.ThirdPartyService.DependencyInjection
 {
-    public static class RouteServiceCollectionExtensions
+    public static class ThirdPartyServiceCollectionExtensions
     {
         [UsedImplicitly]
-        public static IServiceCollection AddPaymentService(this IServiceCollection services)
+        public static IServiceCollection AddThirdPartyService(this IServiceCollection services)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddSingleton<IPaymentService, PaymentService>();
+            services.AddSingleton<IThirdPartyService, ThirdPartyService>();
             
             return services;
         }

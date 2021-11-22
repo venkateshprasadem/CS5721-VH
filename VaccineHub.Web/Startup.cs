@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.Loader;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using JetBrains.Annotations;
@@ -125,7 +123,7 @@ namespace VaccineHub.Web
             services.AddSingleton(new JobScheduleDto(
                 jobType: typeof(GenerateCertificatesJob),
                 cronExpression: "0/5 * * * * ?"));
-
+            
             services.AddHostedService<VaccineHubQuartzHostedService>();
             
             services
