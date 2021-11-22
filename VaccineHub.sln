@@ -12,9 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.Web", "VaccineHu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.Service", "VaccineHub.Service\VaccineHub.Service.csproj", "{A7DB8291-7474-4AC7-9AFC-63C5FEB58B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.MockServices.payment", "VaccineHub.MockServices.payment\VaccineHub.MockServices.payment.csproj", "{06A9FBC5-1667-4262-87B9-7F60D85F7472}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.MockServices", "VaccineHub.MockServices\VaccineHub.MockServices.csproj", "{06A9FBC5-1667-4262-87B9-7F60D85F7472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.PaymentService", "VaccineHub.PaymentService\VaccineHub.PaymentService.csproj", "{078A2C54-E3B9-4925-86D9-6F7830ACCE0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.ThirdPartyService", "VaccineHub.ThirdPartyService\VaccineHub.ThirdPartyService.csproj", "{078A2C54-E3B9-4925-86D9-6F7830ACCE0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

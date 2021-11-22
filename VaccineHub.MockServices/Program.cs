@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace VaccineHub.MockServices.payment
+namespace VaccineHub.MockServices
 {
     internal static class Program
     {

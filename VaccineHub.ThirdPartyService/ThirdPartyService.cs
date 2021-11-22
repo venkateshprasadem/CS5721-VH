@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using VaccineHub.PaymentService.Models;
+using VaccineHub.ThirdPartyService.Models;
 
-namespace VaccineHub.PaymentService
+namespace VaccineHub.ThirdPartyService
 {
-    internal class PaymentService : IPaymentService, IDisposable
+    internal class ThirdPartyService : IThirdPartyService, IDisposable
     {
         private readonly HttpClient _client;
 
         private static readonly TimeSpan MaximumTimeout = TimeSpan.FromSeconds(30);
 
-        public PaymentService()
+        public ThirdPartyService()
         {
             _client = new HttpClient(new HttpClientHandler
             {
@@ -29,28 +29,23 @@ namespace VaccineHub.PaymentService
             GC.SuppressFinalize(this);
         }
 
-        public async Task DebitPaymentAsync(PaymentInformation paymentInformation, CancellationToken cancellationToken)
+        public async Task CallAsync<T>(T t, CancellationToken cancellationToken)
         {
-            if (paymentInformation == null)
+            if (t == null)
             {
-                throw new ArgumentNullException(nameof(paymentInformation));
+                throw new ArgumentNullException(nameof(t));
             }
 
             // URL should be configurable from settings
-            using var response = await PostAsync(new Uri("http://localhost:5010/DebitPayment"), paymentInformation, cancellationToken);
-
-            response.EnsureSuccessStatusCode();
-        }
-
-        public async Task CreditPaymentAsync(PaymentInformation paymentInformation, CancellationToken cancellationToken)
-        {
-            if (paymentInformation == null)
+            // Bad Coding
+            var url = t switch
             {
-                throw new ArgumentNullException(nameof(paymentInformation));
-            }
+                PaymentServiceRequest => "http://localhost:5010/Transact",
+                NotifyDetailsRequest => "http://localhost:5010/NotifyDetails",
+                _ => throw new ArgumentException("Input parameter type is not supported")
+            };
 
-            // URL should be configurable from settings
-            using var response = await PostAsync(new Uri("http://localhost:5010/CreditPayment"), paymentInformation, cancellationToken);
+            using var response = await PostAsync(new Uri(url), t, cancellationToken);
 
             response.EnsureSuccessStatusCode();
         }

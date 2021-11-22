@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using VaccineHub.PaymentService;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Abstractions;
 using VaccineHub.Service.Models;
+using VaccineHub.ThirdPartyService;
 
 namespace VaccineHub.Service.Booking
 {
@@ -27,10 +27,10 @@ namespace VaccineHub.Service.Booking
 
         public async Task<bool> MakeOrCancelBookingAsync(string apiUserId, Models.Booking booking, CancellationToken cancellationToken)
         {
-            var filterManager = new FilterManager(new BookingPaymentDecorator(
+            var filterManager = new FilterManager(new BookingThirdPartyDecorator(
                 new Booking(_serviceProvider,
-                    _serviceProvider.GetRequiredService<IPaymentService>()),
-                _serviceProvider.GetRequiredService<IPaymentService>()));
+                    _serviceProvider.GetRequiredService<IThirdPartyService>()),
+                _serviceProvider.GetRequiredService<IThirdPartyService>()));
             filterManager.SetFilter(new BookingPreConditionFilter(_serviceProvider));
             await filterManager.FilterRequest(apiUserId, booking, cancellationToken);
             return true;
@@ -54,7 +54,7 @@ namespace VaccineHub.Service.Booking
         {
             return new MapperConfiguration(expression =>
             {
-                expression.CreateMap<PaymentService.Models.PaymentInformation, PaymentInformation>()
+                expression.CreateMap<ThirdPartyService.Models.PaymentInformation, PaymentInformation>()
                     .ReverseMap();
 
                 expression.CreateMap<Persistence.Entities.PaymentInformation, PaymentInformation>()
