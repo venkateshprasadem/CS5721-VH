@@ -43,5 +43,9 @@ namespace VaccineHub.Persistence.Entities
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
+        
+        [Column("isCertificateGenerated")]
+        public bool IsCertGenerated { get; set; }
+        
     }
 }

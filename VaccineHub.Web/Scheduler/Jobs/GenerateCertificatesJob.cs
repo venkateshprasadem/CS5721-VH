@@ -1,44 +1,55 @@
 using System;
-using System.IO;
-using System.Net;
-using System.Net.Mail;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
+using VaccineHub.Persistence;
+using VaccineHub.Persistence.Types;
 using VaccineHub.Service.Abstractions;
 
 namespace VaccineHub.Web.Scheduler
 {
     public class GenerateCertificatesJob : IJob
     {
-        
-        private IPDFService pdfService;
-        public GenerateCertificatesJob(IPDFService pdfService)
+        private IServiceProvider _serviceProvider;
+        private IPdfService _pdfService;
+        public GenerateCertificatesJob(IPdfService pdfService, IServiceProvider _serviceProvider)
         {
-            this.pdfService = pdfService;
+            this._serviceProvider = _serviceProvider;
+            this._pdfService = pdfService;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
-                Stream stream = await pdfService.GenerateCertificate();
-                using (MailMessage mm = new MailMessage("uit13328@rmd.ac.in", "21004528@studentmail.ul.ie"))
-                {
-                    mm.Subject = "Generated Certificate";
-                    mm.Body = "Include Body";
-                    mm.Attachments.Add(new Attachment(stream, "Certificate.pdf"));
-                    mm.IsBodyHtml = false;
-                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
-                    {
-                        smtp.EnableSsl = true;
-                        smtp.UseDefaultCredentials = false;
-                        smtp.Credentials =  new NetworkCredential("uit13328@rmd.ac.in", "143password");
-                        smtp.Send(mm);
-                    }
-                }
-                //return Task.CompletedTask;
+                    #if DEBUG
+                        _pdfService.GenerateCertificate("AstaZeneca", "First",
+                            "Mumbai", "uit13328@rmd.ac.in", DateTime.Now);
+                    #else
+                        var scope = _serviceProvider.CreateScope();
+                        var dbContext =scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
+
+                        var bookings = dbContext.Bookings.
+                            Where(i => !i.IsCertGenerated 
+                                       && i.BookingType.Value == BookingType.Book 
+                                       && i.AppointmentDate.Date == DateTime.Today.AddDays(-1).Date).
+                            Include(i => i.ApiUser ).
+                            Include(i=> i.Product).ToList();
+                        Parallel.ForEach(bookings, bookingObj =>
+                        {
+                            if (bookingObj.AppointmentDate >= DateTime.Now)
+                            {
+                                _pdfService.GenerateCertificate(bookingObj.Product.Name, bookingObj.DosageType.ToString(),
+                                    bookingObj.Center.Name,bookingObj.ApiUser.EmailId, bookingObj.AppointmentDate);
+                            }
+                        });
+                    #endif
+                    return Task.CompletedTask;
+
             }
-            catch (Exception e)
+            catch(Exception )
             {
                 throw;
             }
