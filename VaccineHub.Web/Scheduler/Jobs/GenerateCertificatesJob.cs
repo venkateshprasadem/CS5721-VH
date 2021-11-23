@@ -8,51 +8,50 @@ using VaccineHub.Persistence;
 using VaccineHub.Persistence.Types;
 using VaccineHub.Service.Abstractions;
 
-namespace VaccineHub.Web.Scheduler
+namespace VaccineHub.Web.Scheduler.Jobs
 {
     public class GenerateCertificatesJob : IJob
     {
-        private IServiceProvider _serviceProvider;
-        private IPdfService _pdfService;
-        public GenerateCertificatesJob(IPdfService pdfService, IServiceProvider _serviceProvider)
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IPdfService _pdfService;
+
+        public GenerateCertificatesJob(IPdfService pdfService, IServiceProvider serviceProvider)
         {
-            this._serviceProvider = _serviceProvider;
-            this._pdfService = pdfService;
+            _serviceProvider = serviceProvider;
+            _pdfService = pdfService;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
-            try
-            {
-                    #if DEBUG
-                        _pdfService.GenerateCertificate("AstaZeneca", "First",
-                            "Mumbai", "uit13328@rmd.ac.in", DateTime.Now);
-                    #else
-                        var scope = _serviceProvider.CreateScope();
-                        var dbContext =scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
+            var scope = _serviceProvider.CreateScope();
+            var dbContext =scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
-                        var bookings = dbContext.Bookings.
-                            Where(i => !i.IsCertGenerated 
-                                       && i.BookingType.Value == BookingType.Book 
-                                       && i.AppointmentDate.Date == DateTime.Today.AddDays(-1).Date).
-                            Include(i => i.ApiUser ).
-                            Include(i=> i.Product).ToList();
-                        Parallel.ForEach(bookings, bookingObj =>
-                        {
-                            if (bookingObj.AppointmentDate >= DateTime.Now)
-                            {
-                                _pdfService.GenerateCertificate(bookingObj.Product.Name, bookingObj.DosageType.ToString(),
-                                    bookingObj.Center.Name,bookingObj.ApiUser.EmailId, bookingObj.AppointmentDate);
-                            }
-                        });
-                    #endif
-                    return Task.CompletedTask;
+            var bookings = dbContext.Bookings.Where(i => !i.IsCertGenerated &&
+                                                         i.BookingType.Value == BookingType.Book &&
+                                                         i.AppointmentDate.Date ==
+                                                         DateTime.Today.AddDays(-1)
+                                                             .Date)
+                .Include(i => i.ApiUser)
+                .Include(i => i.Product)
+                .Include(i => i.Center)
+                .ToList();
 
-            }
-            catch(Exception )
+            var tasks = bookings.Select(async bookingObj =>
             {
-                throw;
-            }
+                try
+                {
+                    await _pdfService.GenerateCertificateAndSend(bookingObj.Product.Name, bookingObj.DosageType.ToString(),
+                        bookingObj.Center.Name,bookingObj.ApiUser.EmailId, bookingObj.AppointmentDate);
+                    bookingObj.IsCertGenerated = true;
+                    await dbContext.SaveChangesAsync();
+                }
+                catch
+                {
+                    // ignored
+                }
+            });
+
+            await Task.WhenAll(tasks);
         }
     }
 }
