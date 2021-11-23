@@ -25,13 +25,33 @@ namespace VaccineHub.Service.Booking
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<bool> MakeOrCancelBookingAsync(string apiUserId, Models.Booking booking, CancellationToken cancellationToken)
+        public async Task<bool> MakeOrCancelBookingAsync(string apiUserId, Models.Booking booking,
+            CancellationToken cancellationToken)
         {
-            var filterManager = new FilterManager(new BookingThirdPartyDecorator(
-                new Booking(_serviceProvider,
-                    _serviceProvider.GetRequiredService<IThirdPartyService>()),
-                _serviceProvider.GetRequiredService<IThirdPartyService>()));
-            filterManager.SetFilter(new BookingPreConditionFilter(_serviceProvider));
+            FilterManager filterManager;
+
+            switch (booking.BookingType)
+            {
+                case BookingType.Book:
+                    filterManager = new FilterManager(new BookingThirdPartyDecorator(
+                        new Booking(new BookOperationStrategy(_serviceProvider,
+                            _serviceProvider.GetRequiredService<IThirdPartyService>())),
+                        _serviceProvider.GetRequiredService<IThirdPartyService>()));
+                    filterManager.SetFilter(
+                        new BookingPreConditionFilter(new BookPreConditionStrategy(_serviceProvider)));
+                    break;
+                case BookingType.Cancel:
+                    filterManager = new FilterManager(new BookingThirdPartyDecorator(
+                        new Booking(new CancelOperationStrategy(_serviceProvider,
+                            _serviceProvider.GetRequiredService<IThirdPartyService>())),
+                        _serviceProvider.GetRequiredService<IThirdPartyService>()));
+                    filterManager.SetFilter(
+                        new BookingPreConditionFilter(new CancelPreConditionStrategy(_serviceProvider)));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(booking.BookingType?.ToString());
+            }
+
             await filterManager.FilterRequest(apiUserId, booking, cancellationToken);
             return true;
         }
@@ -54,9 +74,6 @@ namespace VaccineHub.Service.Booking
         {
             return new MapperConfiguration(expression =>
             {
-                expression.CreateMap<ThirdPartyService.Models.PaymentInformation, PaymentInformation>()
-                    .ReverseMap();
-
                 expression.CreateMap<Persistence.Entities.PaymentInformation, PaymentInformation>()
                     .ReverseMap();
 

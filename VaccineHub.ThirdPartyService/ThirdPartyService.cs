@@ -36,7 +36,7 @@ namespace VaccineHub.ThirdPartyService
                 throw new ArgumentNullException(nameof(t));
             }
 
-            // URL should be configurable from settings
+            // Should be configurable from configuration
             // Bad Coding
             var url = t switch
             {
