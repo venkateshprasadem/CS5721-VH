@@ -27,7 +27,7 @@ namespace VaccineHub.Service.RegisterDependency
             
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-            services.AddSingleton<IPDFService, PDFService>();
+            services.AddSingleton<IPdfService, PdfService>();
             return services;
         }
     }
