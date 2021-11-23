@@ -82,7 +82,7 @@ namespace VaccineHub.Web.SeedData
                 Product = product,
                 Center = center,
                 ApiUser = apiUser,
-                AppointmentDate = new DateTime(2021, 11, 01),
+                AppointmentDate = new DateTime(2021, 11, 22),
                 BookingType = BookingType.Book,
                 DosageType = DosageType.First,
                 PaymentInformation = new PaymentInformation

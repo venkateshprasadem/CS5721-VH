@@ -29,6 +29,7 @@ using VaccineHub.Web.DependencyInjection;
 using VaccineHub.Web.Filters;
 using VaccineHub.Web.Models;
 using VaccineHub.Web.Scheduler;
+using VaccineHub.Web.Scheduler.Jobs;
 using VaccineHub.Web.SeedData;
 
 namespace VaccineHub.Web
@@ -117,13 +118,13 @@ namespace VaccineHub.Web
             //Registering Qwartz
             services.AddSingleton<IJobFactory, VaccineHubIJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            
+
             //Registering Jobs
             services.AddSingleton<GenerateCertificatesJob>();
             services.AddSingleton(new JobScheduleDto(
-                jobType: typeof(GenerateCertificatesJob),
-                cronExpression: "0/5 * * * * ?"));
-            
+                typeof(GenerateCertificatesJob),
+                "0/5 * * * * ?"));
+
             services.AddHostedService<VaccineHubQuartzHostedService>();
             
             services

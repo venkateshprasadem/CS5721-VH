@@ -13,7 +13,7 @@ namespace VaccineHub.Web.Scheduler
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly IJobFactory _jobFactory;
         private readonly IEnumerable<JobScheduleDto> _jobSchedules;
-        public IScheduler Scheduler { get; set; }
+        private IScheduler Scheduler { get; set; }
 
         public VaccineHubQuartzHostedService(
             ISchedulerFactory schedulerFactory,
@@ -24,16 +24,17 @@ namespace VaccineHub.Web.Scheduler
             _jobSchedules = jobSchedules;
             _jobFactory = jobFactory;
         }
-        
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             Scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
+
             Scheduler.JobFactory = _jobFactory;
 
             foreach (var jobSchedule in _jobSchedules)
             {
                 var job = CreateJob(jobSchedule);
+
                 var trigger = CreateTrigger(jobSchedule);
 
                 await Scheduler.ScheduleJob(job, trigger, cancellationToken);
@@ -44,15 +45,19 @@ namespace VaccineHub.Web.Scheduler
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await Scheduler?.Shutdown(cancellationToken);
+            if (Scheduler != null)
+            {
+                await Scheduler.Shutdown(cancellationToken);   
+            }
         }
 
         private static IJobDetail CreateJob(JobScheduleDto schedule)
         {
             var jobType = schedule.JobType;
+            
             return JobBuilder
                 .Create(jobType)
-                .WithIdentity(jobType.FullName)
+                .WithIdentity(jobType.FullName ?? string.Empty)
                 .WithDescription(jobType.Name)
                 .Build();
         }
