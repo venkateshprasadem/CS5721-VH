@@ -7,18 +7,20 @@ using Quartz;
 using VaccineHub.Persistence;
 using VaccineHub.Persistence.Types;
 using VaccineHub.Service.Abstractions;
+using VaccineHub.Web.Scheduler.Visitable;
 
 namespace VaccineHub.Web.Scheduler.Jobs
 {
     public class GenerateCertificatesJob : IJob
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IPdfService _pdfService;
+        private readonly IVisitor _pdfService;
 
-        public GenerateCertificatesJob(IPdfService pdfService, IServiceProvider serviceProvider)
+        public GenerateCertificatesJob(IVisitor pdfService,
+            IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
             _pdfService = pdfService;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -40,8 +42,8 @@ namespace VaccineHub.Web.Scheduler.Jobs
             {
                 try
                 {
-                    await _pdfService.GenerateCertificateAndSend(bookingObj.Product.Name, bookingObj.DosageType.ToString(),
-                        bookingObj.Center.Name,bookingObj.ApiUser.EmailId, bookingObj.AppointmentDate);
+                    IVisitable visitable = new VisitableBooking(bookingObj);
+                    visitable.Accept(_pdfService);
                     bookingObj.IsCertGenerated = true;
                     await dbContext.SaveChangesAsync();
                 }
