@@ -65,6 +65,7 @@ namespace VaccineHub.Service.Booking
                     },
                     cancellationToken);
 
+                // Recording latest paymentInformation only
                 existingBookedDbBookingForProduct.PaymentInformation = Mapper.Map<Persistence.Entities.PaymentInformation>(booking.PaymentInformation);
                 existingBookedDbBookingForProduct.BookingType = Persistence.Types.BookingType.Cancel;
                 existingBookedDbBookingForProduct.UpdatedAt = DateTime.Now;

@@ -4,6 +4,8 @@ using VaccineHub.Service.Abstractions;
 
 namespace VaccineHub.Web.Scheduler.Visitable
 {
+    // If we want to visit some other type of Booking in future
+    // Like home vaccination booking or distinguish between payment successful or failed booking
     internal class VisitableBooking : IVisitable {
         private readonly Persistence.Entities.Booking _booking;
 

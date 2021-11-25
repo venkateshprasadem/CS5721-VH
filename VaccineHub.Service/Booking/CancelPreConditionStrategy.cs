@@ -40,7 +40,9 @@ namespace VaccineHub.Service.Booking
             {
                 throw new InvalidOperationException("Booking details does not match");
             }
-
+        
+            // Ideally, it won't execute unless second vaccine dose can be taken within next 7 days interval
+            // Check precondition
             // Check if second dose booking exists for product
             var existingBookedDbBookingForProductSecondDose = await dbContext.Bookings
                 .Include(i => i.Product)
