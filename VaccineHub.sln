@@ -16,9 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.MockServices", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHub.ThirdPartyService", "VaccineHub.ThirdPartyService\VaccineHub.ThirdPartyService.csproj", "{078A2C54-E3B9-4925-86D9-6F7830ACCE0A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unittest", "unittest", "{10E0CFE9-E6F8-4DCB-A8A5-71061C31774C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unittests", "unittests", "{10E0CFE9-E6F8-4DCB-A8A5-71061C31774C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHubUnitTest", "VaccineHubUnitTest\VaccineHubUnitTest.csproj", "{C6086ED4-CD68-4F4B-9D8D-EA184146CA40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaccineHubUnitTests", "VaccineHubUnitTests\VaccineHubUnitTests.csproj", "{C6086ED4-CD68-4F4B-9D8D-EA184146CA40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

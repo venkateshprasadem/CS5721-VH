@@ -10,17 +10,17 @@ using VaccineHub.Service.Abstractions;
 using VaccineHub.Service.Center;
 using VaccineHub.Service.Models;
 
-namespace centerservice.moq
+namespace VaccineHubUnitTests
 {
-    public class CenterserviceTest
+    public class CenterServiceTest
     {
         private readonly ICenterService _sut;
-        private readonly Mock<IServiceProvider> _serviceproviderMock = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
 
-        public CenterserviceTest()
+        public CenterServiceTest()
         {
-            _sut = new CenterService(_serviceproviderMock.Object);
+            _sut = new CenterService(_serviceProviderMock.Object);
         }
 
         private static VaccineHubDbContext CreateDbContext()
@@ -45,17 +45,17 @@ namespace centerservice.moq
                 EirCode = "V35 X2P1"
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.AddCenterAsync(center, CancellationToken.None);
@@ -76,7 +76,7 @@ namespace centerservice.moq
         public async Task UpdateCenter_WhenCenterIdExists()
         {
             //Arrange
-            var updatedcenter = new Center
+            var updatedCenter = new Center
             {
                 Id = "limerick",
                 Name = "Hospital Community Center",
@@ -95,13 +95,13 @@ namespace centerservice.moq
             };
 
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
 
@@ -109,10 +109,10 @@ namespace centerservice.moq
             await vaccineHubDbContext.Centers.AddAsync(existingCenter, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
 
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
-            var result = await _sut.UpdateCenterAsync(updatedcenter, CancellationToken.None);
+            var result = await _sut.UpdateCenterAsync(updatedCenter, CancellationToken.None);
                 
             Assert.IsTrue(result);
 
@@ -120,10 +120,10 @@ namespace centerservice.moq
                 await vaccineHubDbContext.Centers.FindAsync(new object[] {"limerick"}, CancellationToken.None);
             Assert.NotNull(dbCenter);
 
-            Assert.AreEqual(dbCenter.Name, updatedcenter.Name);
-            Assert.AreEqual(dbCenter.Telephone,updatedcenter.Telephone);
-            Assert.AreEqual(dbCenter.EirCode,updatedcenter.EirCode);
-            Assert.AreEqual(dbCenter.Description,updatedcenter.Description);
+            Assert.AreEqual(dbCenter.Name, updatedCenter.Name);
+            Assert.AreEqual(dbCenter.Telephone,updatedCenter.Telephone);
+            Assert.AreEqual(dbCenter.EirCode,updatedCenter.EirCode);
+            Assert.AreEqual(dbCenter.Description,updatedCenter.Description);
         }
         
         
@@ -140,20 +140,20 @@ namespace centerservice.moq
                 EirCode = "V35 X2P1"
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
             await vaccineHubDbContext.Centers.AddAsync(center, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
             
             
             //Act
@@ -188,13 +188,13 @@ namespace centerservice.moq
                 EirCode = "V35 X2Z1"
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
@@ -203,7 +203,7 @@ namespace centerservice.moq
             await vaccineHubDbContext.Centers.AddAsync(center2, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
             
             
             //Act

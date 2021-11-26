@@ -7,20 +7,20 @@ using Moq;
 using NUnit.Framework;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Abstractions;
-using VaccineHub.Service.Product;
 using VaccineHub.Service.Models;
+using VaccineHub.Service.Product;
 
-namespace Productservice.moq
+namespace VaccineHubUnitTests
 {
-    public class ProductserviceTest
+    public class ProductServiceTest
     {
         private readonly IProductService _sut;
-        private readonly Mock<IServiceProvider> _serviceproviderMock = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
 
-        public ProductserviceTest()
+        public ProductServiceTest()
         {
-            _sut = new ProductService(_serviceproviderMock.Object);
+            _sut = new ProductService(_serviceProviderMock.Object);
         }
 
         private static VaccineHubDbContext CreateDbContext()
@@ -47,17 +47,17 @@ namespace Productservice.moq
                 Currency = Currency.Eur,
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.AddProductAsync(product, CancellationToken.None);
@@ -79,7 +79,7 @@ namespace Productservice.moq
         public async Task UpdateProduct_WhenProductExists()
         {
             //Arrange
-            var updatedproduct = new Product
+            var updatedProduct = new Product
             {
                 Id = "pfizer",
                 Name = "pfizer",
@@ -90,7 +90,7 @@ namespace Productservice.moq
                 //Currency = Currency.Eur
             };
             
-            var existingproduct = new VaccineHub.Persistence.Entities.Product
+            var existingProduct = new VaccineHub.Persistence.Entities.Product
             {
                 Id = "pfizer",
                 Name = "pfizer",
@@ -102,23 +102,23 @@ namespace Productservice.moq
             };
             
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            await vaccineHubDbContext.Products.AddAsync(existingproduct, CancellationToken.None);
+            await vaccineHubDbContext.Products.AddAsync(existingProduct, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
-            var result = await _sut.UpdateProductAsync(updatedproduct, CancellationToken.None);
+            var result = await _sut.UpdateProductAsync(updatedProduct, CancellationToken.None);
 
             Assert.IsTrue(result);
 
@@ -126,11 +126,11 @@ namespace Productservice.moq
                 await vaccineHubDbContext.Products.FindAsync(new object[] {"pfizer"}, CancellationToken.None);
             Assert.NotNull(dbProduct);
 
-            Assert.AreEqual(dbProduct.Name, updatedproduct.Name);
-            Assert.AreEqual(dbProduct.Cost, updatedproduct.Cost);
-            Assert.AreEqual(dbProduct.Doses, updatedproduct.Doses);
-            Assert.AreEqual(dbProduct.MinIntervalInDays, updatedproduct.MinIntervalInDays);
-            Assert.AreEqual(dbProduct.MaxIntervalInDays, updatedproduct.MaxIntervalInDays);
+            Assert.AreEqual(dbProduct.Name, updatedProduct.Name);
+            Assert.AreEqual(dbProduct.Cost, updatedProduct.Cost);
+            Assert.AreEqual(dbProduct.Doses, updatedProduct.Doses);
+            Assert.AreEqual(dbProduct.MinIntervalInDays, updatedProduct.MinIntervalInDays);
+            Assert.AreEqual(dbProduct.MaxIntervalInDays, updatedProduct.MaxIntervalInDays);
         }
         [Test]
         public async Task GetProductById_WhenProductExists()
@@ -159,13 +159,13 @@ namespace Productservice.moq
             };
             
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
@@ -174,7 +174,7 @@ namespace Productservice.moq
             await vaccineHubDbContext.Products.AddAsync(product2, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.GetProductAsync("pfizer", CancellationToken.None);
@@ -219,13 +219,13 @@ namespace Productservice.moq
             };
             
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
@@ -234,7 +234,7 @@ namespace Productservice.moq
             await vaccineHubDbContext.Products.AddAsync(product2, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.GetAllProductsAsync( CancellationToken.None);
