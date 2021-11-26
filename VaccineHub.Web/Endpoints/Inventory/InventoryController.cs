@@ -94,7 +94,7 @@ namespace VaccineHub.Web.Endpoints.Inventory
         /// </summary>
         [HttpGet]
         [Authorize]
-        [Route("Inventories('centerId/{centerId}')")]
+        [Route("Inventories(centerId/'{centerId}')")]
         [ProducesResponseType(typeof(IList<Models.Inventory>), 200)]
         public async Task<IActionResult> GetAllInventoriesByCenterIdAsync(string centerId, CancellationToken token)
         {
