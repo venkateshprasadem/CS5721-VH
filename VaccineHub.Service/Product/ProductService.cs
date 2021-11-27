@@ -29,7 +29,7 @@ namespace VaccineHub.Service.Product
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
-            var product = await dbContext.Products.FirstAsync(a => a.Id == productId, cancellationToken);
+            var product = await dbContext.Products.FirstOrDefaultAsync(a => a.Id == productId, cancellationToken);
 
             return Mapper.Map<Models.Product>(product);
         }

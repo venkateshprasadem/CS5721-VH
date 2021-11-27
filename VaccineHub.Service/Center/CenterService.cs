@@ -28,7 +28,7 @@ namespace VaccineHub.Service.Center
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
-            var center = await dbContext.Centers.SingleAsync(p => p.Id == centerId, cancellationToken);
+            var center = await dbContext.Centers.FirstOrDefaultAsync(p => p.Id == centerId, cancellationToken);
 
             return Mapper.Map<Models.Center>(center);
         }

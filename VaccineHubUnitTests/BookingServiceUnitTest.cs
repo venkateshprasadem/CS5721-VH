@@ -6,23 +6,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using VaccineHub.Persistence;
-using VaccineHub.Service.Abstractions;
-using VaccineHub.Service.Booking;
-//using VaccineHub.Service.Models;
-using VaccineHub.Persistence.Types;
 using VaccineHub.Persistence.Entities;
+using VaccineHub.Persistence.Types;
+using VaccineHub.Service.Abstractions;
+using VaccineHub.Service.Booking; //using VaccineHub.Service.Models;
 
-namespace bookingservice.moq
+namespace VaccineHubUnitTests
 {
-    public class BookingserviceTest
+    public class BookingServiceTest
     {
         private readonly IBookingService _sut;
-        private readonly Mock<IServiceProvider> _serviceproviderMock = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
-
-        public BookingserviceTest()
+        public BookingServiceTest()
         {
-            _sut = new BookingService(_serviceproviderMock.Object);
+            _sut = new BookingService(_serviceProviderMock.Object);
         }
 
         private static VaccineHubDbContext CreateDbContext()
@@ -45,7 +43,7 @@ namespace bookingservice.moq
                 UserType = UserType.Customer,
                 Password = "21004528"
             };
-            var center = new VaccineHub.Persistence.Entities.Center
+            var center = new Center
             {
                 Id = "limerick",
                 Name = "Hospital Community Center",
@@ -54,7 +52,7 @@ namespace bookingservice.moq
                 EirCode = "V35 X2P1"
             };
 
-            var product = new VaccineHub.Persistence.Entities.Product
+            var product = new Product
             {
                 Id = "pfizer",
                 Name = "pfizer",
@@ -71,9 +69,9 @@ namespace bookingservice.moq
                 Center = center,
                 ApiUser = apiUser,
                 AppointmentDate = new DateTime(2021, 11, 22),
-                BookingType = VaccineHub.Persistence.Types.BookingType.Book,
-                DosageType = VaccineHub.Persistence.Types.DosageType.First,
-                PaymentInformation = new VaccineHub.Persistence.Entities.PaymentInformation
+                BookingType = BookingType.Book,
+                DosageType = DosageType.First,
+                PaymentInformation = new PaymentInformation
                 {
                     CardNumber = "4111111111111111",
                     City = "Limerick",
@@ -85,26 +83,26 @@ namespace bookingservice.moq
                     PostalCode = "V94 CTP6",
                     ProvinceState = "LI",
                     Cvv = "123",
-                    CreditCardType = VaccineHub.Persistence.Types.CreditCardType.Visa,
+                    CreditCardType = CreditCardType.Visa,
                     CardHolderFirstName = "Tom",
                     CardHolderLastName = "Cruise"
                 }
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
             await vaccineHubDbContext.Bookings.AddAsync(booking, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
 
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
 
             //Act

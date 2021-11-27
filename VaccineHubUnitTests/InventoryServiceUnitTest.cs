@@ -11,17 +11,17 @@ using VaccineHub.Service.Abstractions;
 using VaccineHub.Service.Inventory;
 using Inventory = VaccineHub.Service.Models.Inventory;
 
-namespace Inventoryservice.moq
+namespace VaccineHubUnitTests
 {
-    public class InventoryserviceTest
+    public class InventoryServiceTest
     {
         private readonly IInventoryService _sut;
-        private readonly Mock<IServiceProvider> _serviceproviderMock = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
 
-        public InventoryserviceTest()
+        public InventoryServiceTest()
         {
-            _sut = new InventoryService(_serviceproviderMock.Object);
+            _sut = new InventoryService(_serviceProviderMock.Object);
         }
 
         private static VaccineHubDbContext CreateDbContext()
@@ -44,17 +44,17 @@ namespace Inventoryservice.moq
                 Stock = 50
             };
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.AddInventoryAsync(inventory, CancellationToken.None);
@@ -97,14 +97,14 @@ namespace Inventoryservice.moq
                 //Currency = Currency.Eur
             };
 
-            var updatedinventory = new Inventory
+            var updatedInventory = new Inventory
             {
                 ProductId = "pfizer",
                 CenterId = "limerick",
                 Stock = 100
             };
 
-            var existinginventory = new VaccineHub.Persistence.Entities.Inventory
+            var existingInventory = new VaccineHub.Persistence.Entities.Inventory
             {
                 Product = product,
                 Center = center,
@@ -112,22 +112,22 @@ namespace Inventoryservice.moq
             };
 
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            await vaccineHubDbContext.Inventories.AddAsync(existinginventory, CancellationToken.None);
+            await vaccineHubDbContext.Inventories.AddAsync(existingInventory, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
-            var result = await _sut.UpdateInventoryAsync(updatedinventory, CancellationToken.None);
+            var result = await _sut.UpdateInventoryAsync(updatedInventory, CancellationToken.None);
 
             Assert.IsTrue(result);
         }
@@ -158,7 +158,7 @@ namespace Inventoryservice.moq
                 //Currency = Currency.Eur
             };
 
-            var existinginventory = new VaccineHub.Persistence.Entities.Inventory
+            var existingInventory = new VaccineHub.Persistence.Entities.Inventory
             {
                 Product = product,
                 Center = center,
@@ -166,19 +166,19 @@ namespace Inventoryservice.moq
             };
 
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            await vaccineHubDbContext.Inventories.AddAsync(existinginventory, CancellationToken.None);
+            await vaccineHubDbContext.Inventories.AddAsync(existingInventory, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.GetAllInventoriesAsync( CancellationToken.None);
@@ -211,7 +211,7 @@ namespace Inventoryservice.moq
                 //Currency = Currency.Eur
             };
 
-            var existinginventory = new VaccineHub.Persistence.Entities.Inventory
+            var existingInventory = new VaccineHub.Persistence.Entities.Inventory
             {
                 Product = product,
                 Center = center,
@@ -219,19 +219,19 @@ namespace Inventoryservice.moq
             };
 
             var serviceScope = new Mock<IServiceScope>();
-            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
             var serviceScopeFactory = new Mock<IServiceScopeFactory>();
             serviceScopeFactory
                 .Setup(x => x.CreateScope())
                 .Returns(serviceScope.Object);
-            _serviceproviderMock
+            _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
             var vaccineHubDbContext = CreateDbContext();
-            await vaccineHubDbContext.Inventories.AddAsync(existinginventory, CancellationToken.None);
+            await vaccineHubDbContext.Inventories.AddAsync(existingInventory, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
-            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+            _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
 
             //Act
             var result = await _sut.GetAllInventoriesByProductIdAsync( "pfizer", CancellationToken.None);
