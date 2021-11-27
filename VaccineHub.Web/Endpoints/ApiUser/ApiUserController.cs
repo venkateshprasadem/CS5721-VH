@@ -24,7 +24,6 @@ namespace VaccineHub.Web.Endpoints.ApiUser
         ///  Add Api User to Vaccine Hub Database
         /// </summary>
         [HttpPost]
-        [Authorize]
         [Route("ApiUser")]
         [ProducesResponseType(204)]
         public async Task<IActionResult> AddUserAsync([FromBody] Services.Users.Models.ApiUser user, CancellationToken token)

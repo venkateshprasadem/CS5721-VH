@@ -23,12 +23,6 @@ namespace VaccineHub.ThirdPartyService
             });
         }
 
-        public void Dispose()
-        {
-            _client.Dispose();
-            GC.SuppressFinalize(this);
-        }
-
         public async Task CallAsync<T>(T t, CancellationToken cancellationToken)
         {
             if (t == null)
@@ -60,6 +54,12 @@ namespace VaccineHub.ThirdPartyService
             using var request = new HttpRequestMessage(HttpMethod.Post, uri);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return await _client.SendAsync(request, cts.Token);
+        }
+        
+        public void Dispose()
+        {
+            _client.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

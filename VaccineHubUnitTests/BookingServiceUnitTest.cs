@@ -18,7 +18,6 @@ namespace VaccineHubUnitTests
         private readonly IBookingService _sut;
         private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
-
         public BookingServiceTest()
         {
             _sut = new BookingService(_serviceProviderMock.Object);

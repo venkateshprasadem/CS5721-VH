@@ -17,7 +17,6 @@ namespace VaccineHubUnitTests
         private readonly IProductService _sut;
         private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
-
         public ProductServiceTest()
         {
             _sut = new ProductService(_serviceProviderMock.Object);
