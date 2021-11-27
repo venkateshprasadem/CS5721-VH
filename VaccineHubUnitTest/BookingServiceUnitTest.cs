@@ -117,5 +117,64 @@ namespace bookingservice.moq
             //Assert.AreEqual(result.EirCode, center.EirCode);
             //Assert.AreEqual(result.Description, center.Description);
         }
+        
+        [Test]
+        public async Task MakeOrCancelBooking()
+        {
+            //Arrange
+           
+
+            var booking = new VaccineHub.Service.Models.Booking
+            {
+                BookingType = VaccineHub.Service.Models.BookingType.Book,
+                DosageType = VaccineHub.Service.Models.DosageType.First,
+                ProductId = "pfizer",
+                CenterId = "limerick",
+                AppointmentDate = new DateTime(2021, 11, 22),
+                PaymentInformation = new VaccineHub.Service.Models.PaymentInformation
+                {
+                    CardNumber = "4111111111111111",
+                    City = "Limerick",
+                    AddressLine1 = "Bru Na Gruadan",
+                    AddressLine2 = "Castletroy",
+                    CountryCode = "IE",
+                    ExpiryMonth = 10,
+                    ExpiryYear = 22,
+                    PostalCode = "V94 CTP6",
+                    ProvinceState = "LI",
+                    Cvv = "123",
+                    CreditCardType = VaccineHub.Service.Models.CreditCardType.Visa,
+                    CardHolderFirstName = "Tom",
+                    CardHolderLastName = "Cruise"
+                }
+            };
+            
+
+            
+            var serviceScope = new Mock<IServiceScope>();
+            serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceproviderMock.Object);
+
+            var serviceScopeFactory = new Mock<IServiceScopeFactory>();
+            serviceScopeFactory
+                .Setup(x => x.CreateScope())
+                .Returns(serviceScope.Object);
+            _serviceproviderMock
+                .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
+                .Returns(serviceScopeFactory.Object);
+            var vaccineHubDbContext = CreateDbContext();
+
+            _serviceproviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
+
+
+            //Act
+            var result = await _sut.MakeOrCancelBookingAsync("21004528@studentmail.ul.ie", booking,  CancellationToken.None);
+
+            Assert.IsTrue(result);
+
+            //Assert.AreEqual(result., center.Name);
+            //Assert.AreEqual(result.Telephone, center.Telephone);
+            //Assert.AreEqual(result.EirCode, center.EirCode);
+            //Assert.AreEqual(result.Description, center.Description);
+        }
     }
 }   
