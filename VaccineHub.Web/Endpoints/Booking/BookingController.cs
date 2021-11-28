@@ -56,13 +56,31 @@ namespace VaccineHub.Web.Endpoints.Booking
         ///  Retrieve all the Bookings from Vaccine Hub database by Role
         /// </summary>
         [HttpGet]
-        [Authorize()]
+        [Authorize]
         [Route("Bookings")]
         [ProducesResponseType(typeof(IList<Models.Booking>), 200)]
         public async Task<IActionResult> GetAllBookingsAsync(CancellationToken token)
         {
+            if (User?.Claims.FirstOrDefault(f => f.Value.Equals("Admin")) != null)
+            {
+                return Ok((await _bookingService.GetAllBookingsAsync(null, token)).Select(
+                        booking => Mapper.Map<Models.Booking>(booking)));
+            }
+            return Ok((await _bookingService.GetAllBookingsAsync(User?.Identity?.Name, token)).Select(
+                    booking => Mapper.Map<Models.Booking>(booking)));
+        }
+
+        /// <summary>
+        ///  Retrieve all the Bookings from Vaccine Hub database by Customer Id
+        /// </summary>
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("Bookings('{customerId}')")]
+        [ProducesResponseType(typeof(IList<Models.Booking>), 200)]
+        public async Task<IActionResult> GetAllBookingsByCustomerIdAsync(string customerId, CancellationToken token)
+        {
             var bookings =
-                (await _bookingService.GetAllBookingsAsync(User.Identity?.Name, token)).Select(
+                (await _bookingService.GetAllBookingsAsync(customerId, token)).Select(
                     booking => Mapper.Map<Models.Booking>(booking));
 
             return Ok(bookings);

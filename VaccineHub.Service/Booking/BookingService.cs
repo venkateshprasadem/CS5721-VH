@@ -61,6 +61,16 @@ namespace VaccineHub.Service.Booking
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IVaccineHubDbContext>();
 
+            if (apiUserId == null)
+            {
+                return dbContext.Bookings.Include(i => i.Product)
+                    .Include(i => i.Center)
+                    .Include(i => i.ApiUser)
+                    .Include(i => i.PaymentInformation)
+                    .Select(i => Mapper.Map<Models.Booking>(i))
+                    .ToListAsync(cancellationToken);
+            }
+
             return dbContext.Bookings.Include(i => i.Product)
                 .Include(i => i.Center)
                 .Include(i => i.ApiUser)
