@@ -16,7 +16,7 @@ namespace VaccineHubUnitTests
     public class ApiUserServiceTest
     {
         private readonly IApiUsersDataProvider _sut;
-        private readonly Mock<IServiceProvider> _serviceProviderMock = new Mock<IServiceProvider>();
+        private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
 
         public ApiUserServiceTest()

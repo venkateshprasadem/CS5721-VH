@@ -14,4 +14,7 @@ riderModule.iml
 ### Idea ###
 .idea/*
 
-VaccineHub.sln.DotSettings.user
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
