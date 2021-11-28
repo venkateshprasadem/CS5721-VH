@@ -42,6 +42,8 @@ namespace VaccineHub.Service.Inventory
 
             await dbContext.Inventories.AddAsync(dbInventory, cancellationToken);
 
+            await dbContext.SaveChangesAsync(cancellationToken);
+
             return true;
         }
 

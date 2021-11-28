@@ -45,6 +45,7 @@ namespace VaccineHubUnitTests
                 MaxIntervalInDays = 27,
                 Currency = Currency.Eur,
             };
+
             var serviceScope = new Mock<IServiceScope>();
             serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
@@ -86,7 +87,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 17,
                 MaxIntervalInDays = 27,
-                //Currency = Currency.Eur
+                Currency = Currency.Eur
             };
             
             var existingProduct = new VaccineHub.Persistence.Entities.Product
@@ -97,7 +98,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 17,
                 MaxIntervalInDays = 27,
-                //Currency = Currency.Eur
+                Currency = VaccineHub.Persistence.Types.Currency.Eur
             };
             
             var serviceScope = new Mock<IServiceScope>();
@@ -143,7 +144,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 17,
                 MaxIntervalInDays = 27,
-                //Currency = Currency.Eur
+                Currency = VaccineHub.Persistence.Types.Currency.Eur
             };
             
             var product2 = new VaccineHub.Persistence.Entities.Product
@@ -154,7 +155,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 14,
                 MaxIntervalInDays = 28,
-                //Currency = Currency.Eur
+                Currency = VaccineHub.Persistence.Types.Currency.Eur
             };
             
             var serviceScope = new Mock<IServiceScope>();
@@ -180,15 +181,25 @@ namespace VaccineHubUnitTests
 
             Assert.NotNull(result);
 
-            var dbProduct =
+            var dbProduct1 =
                 await vaccineHubDbContext.Products.FindAsync(new object[] {"pfizer"}, CancellationToken.None);
-            Assert.NotNull(dbProduct);
+            Assert.NotNull(dbProduct1);
 
-            Assert.AreEqual(dbProduct.Name, product1.Name);
-            Assert.AreEqual(dbProduct.Cost, product1.Cost);
-            Assert.AreEqual(dbProduct.Doses, product1.Doses);
-            Assert.AreEqual(dbProduct.MinIntervalInDays, product1.MinIntervalInDays);
-            Assert.AreEqual(dbProduct.MaxIntervalInDays, product1.MaxIntervalInDays);
+            Assert.AreEqual(dbProduct1.Name, product1.Name);
+            Assert.AreEqual(dbProduct1.Cost, product1.Cost);
+            Assert.AreEqual(dbProduct1.Doses, product1.Doses);
+            Assert.AreEqual(dbProduct1.MinIntervalInDays, product1.MinIntervalInDays);
+            Assert.AreEqual(dbProduct1.MaxIntervalInDays, product1.MaxIntervalInDays);
+
+            var dbProduct2 =
+                await vaccineHubDbContext.Products.FindAsync(new object[] {"AstraZeneca"}, CancellationToken.None);
+            Assert.NotNull(dbProduct2);
+
+            Assert.AreEqual(dbProduct2.Name, product2.Name);
+            Assert.AreEqual(dbProduct2.Cost, product2.Cost);
+            Assert.AreEqual(dbProduct2.Doses, product2.Doses);
+            Assert.AreEqual(dbProduct2.MinIntervalInDays, product2.MinIntervalInDays);
+            Assert.AreEqual(dbProduct2.MaxIntervalInDays, product2.MaxIntervalInDays);  
         }
         
          [Test]
@@ -203,7 +214,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 17,
                 MaxIntervalInDays = 27,
-                //Currency = Currency.Eur
+                Currency = VaccineHub.Persistence.Types.Currency.Eur
             };
             
             var product2 = new VaccineHub.Persistence.Entities.Product
@@ -214,7 +225,7 @@ namespace VaccineHubUnitTests
                 Doses = 2,
                 MinIntervalInDays = 14,
                 MaxIntervalInDays = 28,
-                //Currency = Currency.Eur
+                Currency = VaccineHub.Persistence.Types.Currency.Eur
             };
             
             var serviceScope = new Mock<IServiceScope>();
@@ -227,9 +238,9 @@ namespace VaccineHubUnitTests
             _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
+
             var vaccineHubDbContext = CreateDbContext();
             await vaccineHubDbContext.Products.AddAsync(product1, CancellationToken.None);
-            await vaccineHubDbContext.SaveChangesAsync();
             await vaccineHubDbContext.Products.AddAsync(product2, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
             
@@ -240,6 +251,7 @@ namespace VaccineHubUnitTests
 
             Assert.NotNull(result);
             
+            Assert.AreEqual(result.Count, 2);
         }
     }
 

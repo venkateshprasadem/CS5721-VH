@@ -17,7 +17,6 @@ namespace VaccineHubUnitTests
         private readonly ICenterService _sut;
         private readonly Mock<IServiceProvider> _serviceProviderMock = new();
 
-
         public CenterServiceTest()
         {
             _sut = new CenterService(_serviceProviderMock.Object);
@@ -166,7 +165,7 @@ namespace VaccineHubUnitTests
             Assert.AreEqual(result.EirCode,center.EirCode);
             Assert.AreEqual(result.Description,center.Description);
         }
-        
+
         [Test]
         public async Task GetAllCenters()
         {
@@ -179,6 +178,7 @@ namespace VaccineHubUnitTests
                 Telephone = "0123456789",
                 EirCode = "V35 X2P1"
             };
+
             var center2 = new VaccineHub.Persistence.Entities.Center
             {
                 Id = "limerick01",
@@ -187,6 +187,7 @@ namespace VaccineHubUnitTests
                 Telephone = "0123456564",
                 EirCode = "V35 X2Z1"
             };
+
             var serviceScope = new Mock<IServiceScope>();
             serviceScope.Setup(x => x.ServiceProvider).Returns(_serviceProviderMock.Object);
 
@@ -197,25 +198,21 @@ namespace VaccineHubUnitTests
             _serviceProviderMock
                 .Setup(x => x.GetService(typeof(IServiceScopeFactory)))
                 .Returns(serviceScopeFactory.Object);
+
             var vaccineHubDbContext = CreateDbContext();
             await vaccineHubDbContext.Centers.AddAsync(center1, CancellationToken.None);
-            await vaccineHubDbContext.SaveChangesAsync();
             await vaccineHubDbContext.Centers.AddAsync(center2, CancellationToken.None);
             await vaccineHubDbContext.SaveChangesAsync();
-            
+
             _serviceProviderMock.Setup(s => s.GetService(typeof(IVaccineHubDbContext))).Returns(vaccineHubDbContext);
-            
-            
+
+
             //Act
-            var result = await _sut.GetAllCentersAsync( CancellationToken.None);
-            //var result2 = await _sut.GetCenterAsync("limerick01", CancellationToken.None);
-            
+            var result = await _sut.GetAllCentersAsync(CancellationToken.None);
+
             Assert.NotNull(result);
-            //CollectionAssert.Contains(result,center1.Id);
-            //CollectionAssert.Contains(result,center2.Id);
-            
+
+            Assert.AreEqual(result.Count, 2);
         }
-        
-        
     }
 }
