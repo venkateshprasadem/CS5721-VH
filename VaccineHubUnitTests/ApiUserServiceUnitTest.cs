@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using VaccineHub.Persistence;
+using VaccineHub.Persistence.Types;
 using VaccineHub.Web.Services.Users;
 using VaccineHub.Web.Services.Users.Models; 
 //using VaccineHub.Persistence.Entities;

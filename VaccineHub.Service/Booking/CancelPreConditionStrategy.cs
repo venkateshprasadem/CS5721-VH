@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Models;
+using VaccineHub.Service.Types;
 
 namespace VaccineHub.Service.Booking
 {

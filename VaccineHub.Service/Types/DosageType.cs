@@ -1,4 +1,4 @@
-namespace VaccineHub.Service.Models
+namespace VaccineHub.Service.Types
 {
     public enum DosageType
     {

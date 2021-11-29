@@ -54,16 +54,23 @@ namespace VaccineHub.Service.Booking
                         ,
                         cancellationToken);
 
-                // Credit Payment back to Customer Card
-                await _thirdPartyService.CallAsync(
-                    new PaymentServiceRequest
-                    {
-                        TransactionType = TransactionType.Credit,
-                        Cost = existingBookedDbBookingForProduct.Product.Cost,
-                        PaymentInformation = 
-                            Mapper.Map<PaymentInformation>(booking.PaymentInformation)
-                    },
-                    cancellationToken);
+                try
+                {
+                    // Credit Payment back to Customer Card
+                    await _thirdPartyService.CallAsync(
+                        new PaymentServiceRequest
+                        {
+                            TransactionType = TransactionType.Credit,
+                            Cost = existingBookedDbBookingForProduct.Product.Cost,
+                            PaymentInformation = 
+                                Mapper.Map<PaymentInformation>(booking.PaymentInformation)
+                        },
+                        cancellationToken);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Credit transaction failed");
+                }
 
                 // Recording latest paymentInformation only
                 existingBookedDbBookingForProduct.PaymentInformation = Mapper.Map<Persistence.Entities.PaymentInformation>(booking.PaymentInformation);

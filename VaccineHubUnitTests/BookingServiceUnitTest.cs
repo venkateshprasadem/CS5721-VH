@@ -186,8 +186,8 @@ namespace VaccineHubUnitTests
 
             var bookingRequest = new VaccineHub.Service.Models.Booking
             {
-                BookingType = VaccineHub.Service.Models.BookingType.Book,
-                DosageType = VaccineHub.Service.Models.DosageType.First,
+                BookingType = VaccineHub.Service.Types.BookingType.Book,
+                DosageType = VaccineHub.Service.Types.DosageType.First,
                 ProductId = "pfizer",
                 CenterId = "limerick",
                 AppointmentDate = new DateTime(2021, 11, 22),
@@ -203,7 +203,7 @@ namespace VaccineHubUnitTests
                     PostalCode = "V94 CTP6",
                     ProvinceState = "LI",
                     Cvv = "123",
-                    CreditCardType = VaccineHub.Service.Models.CreditCardType.Visa,
+                    CreditCardType = VaccineHub.Service.Types.CreditCardType.Visa,
                     CardHolderFirstName = "Tom",
                     CardHolderLastName = "Cruise"
                 }
@@ -340,8 +340,8 @@ namespace VaccineHubUnitTests
 
             var cancelBookingRequest = new VaccineHub.Service.Models.Booking
             {
-                BookingType = VaccineHub.Service.Models.BookingType.Cancel,
-                DosageType = VaccineHub.Service.Models.DosageType.First,
+                BookingType = VaccineHub.Service.Types.BookingType.Cancel,
+                DosageType = VaccineHub.Service.Types.DosageType.First,
                 ProductId = "pfizer",
                 CenterId = "limerick",
                 AppointmentDate = new DateTime(2021, 11, 22),
@@ -357,7 +357,7 @@ namespace VaccineHubUnitTests
                     PostalCode = "V94 CTP6",
                     ProvinceState = "LI",
                     Cvv = "123",
-                    CreditCardType = VaccineHub.Service.Models.CreditCardType.Visa,
+                    CreditCardType = VaccineHub.Service.Types.CreditCardType.Visa,
                     CardHolderFirstName = "Tom",
                     CardHolderLastName = "Cruise"
                 }

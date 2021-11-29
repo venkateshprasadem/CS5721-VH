@@ -1,4 +1,5 @@
 using System;
+using VaccineHub.Service.Types;
 
 namespace VaccineHub.Service.Models
 {

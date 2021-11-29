@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Concurrency;
+using VaccineHub.Service.Types;
 using VaccineHub.ThirdPartyService;
 using VaccineHub.ThirdPartyService.Models;
 
@@ -60,16 +61,23 @@ namespace VaccineHub.Service.Booking
                         Mapper.Map<Persistence.Entities.PaymentInformation>(booking.PaymentInformation)
                 });
 
-                // Debit Payment back from Customer Card
-                await _thirdPartyService.CallAsync(
-                    new PaymentServiceRequest
-                    {
-                        TransactionType = TransactionType.Debit,
-                        Cost = product.Cost,
-                        PaymentInformation = 
-                            Mapper.Map<PaymentInformation>(booking.PaymentInformation)
-                    },
-                    cancellationToken);
+                try
+                {
+                    // Debit Payment from Customer Card
+                    await _thirdPartyService.CallAsync(
+                        new PaymentServiceRequest
+                        {
+                            TransactionType = TransactionType.Debit,
+                            Cost = product.Cost,
+                            PaymentInformation = 
+                                Mapper.Map<PaymentInformation>(booking.PaymentInformation)
+                        },
+                        cancellationToken);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Debit transaction failed");
+                }
 
                 inventory.Stock -= 1;
 
@@ -89,9 +97,9 @@ namespace VaccineHub.Service.Booking
 
                 expression.CreateMap<Service.Models.PaymentInformation, Persistence.Entities.PaymentInformation>();
 
-                expression.CreateMap<VaccineHub.Service.Models.BookingType, Persistence.Types.BookingType>();
+                expression.CreateMap<Types.BookingType, Persistence.Types.BookingType>();
 
-                expression.CreateMap<Models.DosageType, Persistence.Types.DosageType>();
+                expression.CreateMap<DosageType, Persistence.Types.DosageType>();
             });
         }
     }

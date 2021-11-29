@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using VaccineHub.Persistence;
 using VaccineHub.Service.Abstractions;
 using VaccineHub.Service.Models;
+using VaccineHub.Service.Types;
 using VaccineHub.ThirdPartyService;
 
 namespace VaccineHub.Service.Booking
