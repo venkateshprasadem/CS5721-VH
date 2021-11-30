@@ -35,5 +35,5 @@ Install the following:
 
 Once project is built and running, we will need to authenticate using basic authentication in order to make API requests. 
 In memory database, we are seeding Admin Api User with username - admin@studentmail.ul.ie and password - admin. 
-If we plug in another database, We need to perform [database migration activity](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli) and then we need to call the ApiUser POST endpoint and register Admins and Customer.
+If we plug in another database, We have to perform [database migration activity](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli) and then we can call the ApiUser POST endpoint and register Admins and Customers.
 
