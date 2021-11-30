@@ -31,7 +31,7 @@ Install the following:
 3. Within the CS5721-VH repository, Run the Mock service `dotnet ./VaccineHub.MockServices/bin/Debug/net5.0/VaccineHub.MockServices.dll`
 6. [Navigate to the swagger page](http://localhost:5001/swagger/index.html) in a browser of choice.
 
-### Client API Authentication
+### API Authentication
 
 Once project is built and running, we will need to authenticate using basic authentication in order to make API requests. 
 In memory database, we are seeding Admin Api User with username - admin@studentmail.ul.ie and password - admin. 
